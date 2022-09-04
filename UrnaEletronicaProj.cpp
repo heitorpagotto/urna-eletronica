@@ -17,6 +17,7 @@ void TransformCursorCoordinates(int x, int y);
 void RenderMenu(int width, int height, int startingRow,  int startingColumn);
 void RenderBasicInfo();
 void RenderNumberTiles();
+void HandleKeyPresses(int keycode);
 
 int main() {
 	ConfigureAppFullScreen();
@@ -85,14 +86,40 @@ int HandleProgramRunning() {
 					system("cls");
 					RenderBasicInfo();
 				}
-				// kill window
+				
 				break;
 			default:
-				// MAKE DEFAULT BEHAVIOUR
+				HandleKeyPresses(pressedKey);
 				break;
 		}	
 	}
 	return 0;
+}
+
+void HandleKeyPresses(int keycode) {
+	switch (currentStep) {
+		case 0:
+			// BEM VINDO AS ELEIÇÕES 2022
+			break;
+		case 1:
+			// SEU VOTO PARA DEPUTADO FED.
+			break;
+		case 2:
+			// SEU VOTO PARA DEPUTADO EST.
+			break;
+		case 3:
+			// SEU VOTO PARA SENADOR
+			break;
+		case 4:
+			// SEU VOTO PARA GOVERNADOR
+			break;
+		case 5:
+			// SEU VOTO PARA PRESIDENTE
+			break;
+		case 6:
+			// FIM
+			break;
+	}
 }
 
 void RenderBasicInfo() {
