@@ -159,6 +159,7 @@ void HandleKeyPresses(int keycode) {
 			RenderStateDeputy(true);
 			federalDeputyBlank += 1;
 			isVotingWhite = false;
+			//mciSendString("play wave1.wav", NULL, 0, NULL);
 		}
 		else {
 			if (!isVotingWhite) {
