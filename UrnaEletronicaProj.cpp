@@ -8,7 +8,7 @@ int currentStep = 0;
 
 int isProgramRunning = 1;
 
-int passwordSecret = 20142018;
+int passwordSecret = 50485050; //ano
 //int passwordSecret = 123;
 
 int currentNumberPosition = 0;
@@ -124,10 +124,8 @@ int HandleProgramRunning() {
 				printf("Insira a senha para visualizar os resultados:");
 				TransformCursorCoordinates(75, 16);
 
-				
+				int insertedPassword = HandlePassword();
 
-				int insertedPassword;
-				scanf("%d", &insertedPassword);
 				if (insertedPassword == passwordSecret) {
 					system("cls");
 					RenderResultsMenu();
@@ -160,17 +158,16 @@ int HandleProgramRunning() {
 				printf("Insira a senha para sair do aplicativo:");
 				TransformCursorCoordinates(75, 16);
 				int insertedPasswordExit = HandlePassword();
-				//scanf("%d", &insertedPasswordExit);
 
 				if (insertedPasswordExit == passwordSecret) {
 					isProgramRunning = 0;
 				}
 				else {
-					//isShowingResults = false;
-					//currentStep = 0;
-					//isExitingApp = false;
-					//system("cls");
-					//RenderBasicInfo();
+					isShowingResults = false;
+					currentStep = 0;
+					isExitingApp = false;
+					system("cls");
+					RenderBasicInfo();
 				}
 			}
 			break;
@@ -763,8 +760,8 @@ int VectorToInt() {
 
 void RenderResultsMenu() {
 	RenderMenu(170, 47, 0, 0);
-	RenderMenu(12, 2, 1, 1);
-	TransformCursorCoordinates(2, 2);
+	RenderMenu(168, 2, 1, 1);
+	TransformCursorCoordinates(80, 2);
 	printf("RESULTADOS");
 
 	RenderMenu(168, 3, 43, 1);
@@ -778,9 +775,9 @@ void RenderResultsMenu() {
 	printf("DEPUTADO FEDERAL");
 	
 	int idx = 0;
-	for (idx = 0; idx <= 6; idx++) {
+	for (idx = 0; idx <= 5; idx++) {
 		TransformCursorCoordinates(5, 10 + idx);
-		if (idx <= 4) {
+		if (idx < 4) {
 			printf("(%s) %s - %d Votos", dep_federal[idx].partido,dep_federal[idx].nome, dep_federal[idx].qtd_votos);
 		}
 		else if (idx == 5) {
@@ -791,21 +788,73 @@ void RenderResultsMenu() {
 		}
 	}
 
-	RenderMenu(21, 2, 7, 40);
-	TransformCursorCoordinates(42, 8);
+	RenderMenu(21, 2, 7, 43);
+	TransformCursorCoordinates(45, 8);
 	printf("DEPUTADO ESTADUAL");
 
-	RenderMenu(19, 2, 7, 75);
-	TransformCursorCoordinates(81, 8);
+	for (idx = 0; idx <= 5; idx++) {
+		TransformCursorCoordinates(45, 10 + idx);
+		if (idx < 4) {
+			printf("(%s) %s - %d Votos", dep_estadual[idx].partido, dep_estadual[idx].nome, dep_estadual[idx].qtd_votos);
+		}
+		else if (idx == 5) {
+			printf("%d Votos Brancos", stateDeputyBlank);
+		}
+		else {
+			printf("%d Votos Nulos", stateDeputyNull);
+		}
+	}
+
+	RenderMenu(19, 2, 17, 5);
+	TransformCursorCoordinates(7, 18);
 	printf("SENADOR");
 
-	RenderMenu(20, 2, 7, 110);
-	TransformCursorCoordinates(115, 8);
+	for (idx = 0; idx <= 5; idx++) {
+		TransformCursorCoordinates(5, 20 + idx);
+		if (idx < 4) {
+			printf("(%s) %s - %d Votos", senador[idx].partido, senador[idx].nome, senador[idx].qtd_votos);
+		}
+		else if (idx == 5) {
+			printf("%d Votos Brancos", senatorBlank);
+		}
+		else {
+			printf("%d Votos Nulos", senatorNull);
+		}
+	}
+
+	RenderMenu(20, 2, 17, 85);
+	TransformCursorCoordinates(87, 18);
 	printf("GOVERNADOR");
 
-	RenderMenu(20, 2, 7, 145);
-	TransformCursorCoordinates(150, 8);
+	for (idx = 0; idx <= 5; idx++) {
+		TransformCursorCoordinates(85, 20 + idx);
+		if (idx < 4) {
+			printf("(%s) %s [Vice: %s] - %d Votos", governador[idx].partido, governador[idx].nome, governador[idx].nome_vice, governador[idx].qtd_votos);
+		}
+		else if (idx == 5) {
+			printf("%d Votos Brancos", governorBlank);
+		}
+		else {
+			printf("%d Votos Nulos", governorNull);
+		}
+	}
+
+	RenderMenu(20, 2, 27, 40);
+	TransformCursorCoordinates(43, 28);
 	printf("PRESIDENTE");
+
+	for (idx = 0; idx <= 5; idx++) {
+		TransformCursorCoordinates(40, 30 + idx);
+		if (idx < 4) {
+			printf("(%s) %s [Vice: %s] - %d Votos", presidente[idx].partido, presidente[idx].nome, presidente[idx].nome_vice, presidente[idx].qtd_votos);
+		}
+		else if (idx == 5) {
+			printf("%d Votos Brancos", presidentBlank);
+		}
+		else {
+			printf("%d Votos Nulos", presidentNull);
+		}
+	}
 }
 
 int FindCandidateIndex(int candidateNumber) {
@@ -956,17 +1005,15 @@ void Candidates() {
 int HandlePassword() {
 	int passI = 0;
 	char character;
-	char* charPassword;
-	int actualPassword[8];
+	int actualPassword[4];
 	while ((character = _getch()) != 13) {
-		charPassword[passI] = (char)character;
-		actualPassword[passI] = (int)charPassword[passI];
+		actualPassword[passI] = character;
 		passI++;
-		//printf("*");
-		printf("%d", actualPassword[passI]);
+		printf("*");
 	}
 
-	/*int value = 0;
+	int value = 0;
+
 	for (auto i : actualPassword)
 	{
 		int number = i;
@@ -977,7 +1024,7 @@ int HandlePassword() {
 		} while (i != 0);
 
 		value += number;
-	}*/
+	}
 
-	return 20142018;
+	return value;
 }
