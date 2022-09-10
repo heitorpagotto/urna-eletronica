@@ -16,6 +16,7 @@ int currentNumberPosition = 0;
 int voteNumber[5];
 
 bool isVotingWhite = false;
+bool isVotingNull = false;
 
 typedef struct {
 	char nome[60];
@@ -37,6 +38,12 @@ int senatorBlank;
 int governorBlank;
 int presidentBlank;
 
+int federalDeputyNull;
+int stateDeputyNull;
+int senatorNull;
+int governorNull;
+int presidentNull;
+
 void ConfigureAppFullScreen();
 int HandleProgramRunning();
 void TransformCursorCoordinates(int x, int y);
@@ -54,10 +61,11 @@ void HandleNumberSlot(int quantity, bool firstTimeRender);
 void HandleVotingNumbers(int pressedKey, int totalNumbersAllowed);
 void RenderConfirmationInfo();
 void candidatos();
-candidato FindCandidates(int candidateNumber);
+int FindCandidateIndex(int candidateNumber);
 int VectorToInt();
 void RenderResultsMenu();
 void RenderCandidateInfo(candidato candidate);
+void RenderNullVote();
 
 int main() {
 	ConfigureAppFullScreen();
@@ -147,7 +155,7 @@ int HandleProgramRunning() {
 }
 
 void HandleKeyPresses(int keycode) {
-	candidato currentCandidate;
+	int currentCandidateIdx;
 	switch (currentStep) {
 		case 0:
 			if (keycode == 13) {
@@ -172,8 +180,14 @@ void HandleKeyPresses(int keycode) {
 			else if (keycode == 13 && currentNumberPosition == 4) {
 				currentStep = 2;
 				currentNumberPosition = 0;
+				if (isVotingNull) {
+					isVotingNull = false;
+					federalDeputyNull += 1;
+				}
+				else {
+					dep_federal[currentCandidateIdx].qtd_votos += 1;
+				}
 				RenderStateDeputy(true);
-				currentCandidate.qtd_votos += 1;
 			}
 			else if (keycode == 13 && isVotingWhite) {
 				currentStep = 2;
@@ -181,6 +195,7 @@ void HandleKeyPresses(int keycode) {
 				RenderStateDeputy(true);
 				federalDeputyBlank += 1;
 				isVotingWhite = false;
+				isVotingNull = false;
 				//mciSendString("play wave1.wav", NULL, 0, NULL);
 			}
 			else {
@@ -190,11 +205,15 @@ void HandleKeyPresses(int keycode) {
 				if (currentNumberPosition == 4) {
 					RenderConfirmationInfo();
 
-					//currentCandidate = FindCandidates(VectorToInt());
-					currentCandidate = FindCandidates(0000);
-
-					RenderCandidateInfo(currentCandidate);
-					//TODO: SEARCH AND IF INFORMED NUMBER DOES NOT EXIST SHOW NULL VOTE
+					currentCandidateIdx = FindCandidateIndex(VectorToInt());
+					
+					if (currentCandidateIdx == -1) {
+						RenderNullVote();
+						isVotingNull = true;
+					}
+					else {
+						RenderCandidateInfo(dep_federal[currentCandidateIdx]);
+					}
 				}
 			}
 
@@ -216,8 +235,14 @@ void HandleKeyPresses(int keycode) {
 		else if (keycode == 13 && currentNumberPosition == 5) {
 			currentStep = 3;
 			currentNumberPosition = 0;
+			if (isVotingNull) {
+				isVotingNull = false;
+				stateDeputyNull += 1;
+			}
+			else {
+				dep_estadual[currentCandidateIdx].qtd_votos += 1;
+			}
 			RenderSenator(true);
-			//TODO: ADD ONE TO VOTED CANDIDATE
 		}
 		else if (keycode == 13 && isVotingWhite) {
 			currentStep = 3;
@@ -232,8 +257,16 @@ void HandleKeyPresses(int keycode) {
 			}
 			if (currentNumberPosition == 5) {
 				RenderConfirmationInfo();
-				//TODO: SEARCH AND IF INFORMED NUMBER DOES NOT EXIST SHOW NULL VOTE
-				// TODO: SEARCH AND RENDER CANDIDATE NAME/PARTY
+
+				currentCandidateIdx = FindCandidateIndex(VectorToInt());
+
+				if (currentCandidateIdx == -1) {
+					RenderNullVote();
+					isVotingNull = true;
+				}
+				else {
+					RenderCandidateInfo(dep_estadual[currentCandidateIdx]);
+				}
 			}
 		}
 		break;
@@ -254,8 +287,14 @@ void HandleKeyPresses(int keycode) {
 		else if (keycode == 13 && currentNumberPosition == 3) {
 			currentStep = 4;
 			currentNumberPosition = 0;
+			if (isVotingNull) {
+				isVotingNull = false;
+				senatorNull += 1;
+			}
+			else {
+				senador[currentCandidateIdx].qtd_votos += 1;
+			}
 			RenderGovernor(true);
-			//TODO: ADD ONE TO VOTED CANDIDATE
 		}
 		else if (keycode == 13 && isVotingWhite) {
 			currentStep = 4;
@@ -270,8 +309,16 @@ void HandleKeyPresses(int keycode) {
 			}
 			if (currentNumberPosition == 3) {
 				RenderConfirmationInfo();
-				//TODO: SEARCH AND IF INFORMED NUMBER DOES NOT EXIST SHOW NULL VOTE
-				// TODO: SEARCH AND RENDER CANDIDATE NAME/PARTY
+				
+				currentCandidateIdx = FindCandidateIndex(VectorToInt());
+
+				if (currentCandidateIdx == -1) {
+					RenderNullVote();
+					isVotingNull = true;
+				}
+				else {
+					RenderCandidateInfo(senador[currentCandidateIdx]);
+				}
 			}
 		}
 		break;
@@ -292,8 +339,14 @@ void HandleKeyPresses(int keycode) {
 		else if (keycode == 13 && currentNumberPosition == 2) {
 			currentStep = 5;
 			currentNumberPosition = 0;
+			if (isVotingNull) {
+				isVotingNull = false;
+				governorNull += 1;
+			}
+			else {
+				governador[currentCandidateIdx].qtd_votos += 1;
+			}
 			RenderPresident(true);
-			//TODO: ADD ONE TO VOTED CANDIDATE
 		}
 		else if (keycode == 13 && isVotingWhite) {
 			currentStep = 5;
@@ -308,8 +361,16 @@ void HandleKeyPresses(int keycode) {
 			}
 			if (currentNumberPosition == 2) {
 				RenderConfirmationInfo();
-				//TODO: SEARCH AND IF INFORMED NUMBER DOES NOT EXIST SHOW NULL VOTE
-				// TODO: SEARCH AND RENDER CANDIDATE NAME/PARTY
+
+				currentCandidateIdx = FindCandidateIndex(VectorToInt());
+
+				if (currentCandidateIdx == -1) {
+					RenderNullVote();
+					isVotingNull = true;
+				}
+				else {
+					RenderCandidateInfo(governador[currentCandidateIdx]);
+				}
 			}
 		}
 		break;
@@ -330,7 +391,13 @@ void HandleKeyPresses(int keycode) {
 		else if (keycode == 13 && currentNumberPosition == 2) {
 			currentStep = 6;
 			currentNumberPosition = 0;
-			//TODO: ADD ONE TO VOTED CANDIDATE
+			if (isVotingNull) {
+				isVotingNull = false;
+				presidentNull += 1;
+			}
+			else {
+				presidente[currentCandidateIdx].qtd_votos += 1;
+			}
 			RenderEnd();
 		}
 		else if (keycode == 13 && isVotingWhite) {
@@ -346,8 +413,16 @@ void HandleKeyPresses(int keycode) {
 			}
 			if (currentNumberPosition == 2) {
 				RenderConfirmationInfo();
-				//TODO: SEARCH AND IF INFORMED NUMBER DOES NOT EXIST SHOW NULL VOTE
-				// TODO: SEARCH AND RENDER CANDIDATE NAME/PARTY
+				
+				currentCandidateIdx = FindCandidateIndex(VectorToInt());
+
+				if (currentCandidateIdx == -1) {
+					RenderNullVote();
+					isVotingNull = true;
+				}
+				else {
+					RenderCandidateInfo(presidente[currentCandidateIdx]);
+				}
 			}
 		}
 		break;
@@ -390,7 +465,6 @@ void HandleNumberSlot(int quantity, bool firstTimeRender) {
 }
 
 void HandleVotingNumbers(int pressedKey, int totalNumbersAllowed) {
-	//printf("%d", pressedKey);
 	if (currentNumberPosition < totalNumbersAllowed) {
 		switch (pressedKey) {
 		case 48:
@@ -514,6 +588,11 @@ void RenderConfirmationInfo() {
 	printf("Aperte (ENTER) para CONFIRMAR seu voto");
 	TransformCursorCoordinates(4, 43);
 	printf("Aperte (-) para CORRIGIR seu voto");
+}
+
+void RenderNullVote() {
+	TransformCursorCoordinates(35, 25);
+	printf("VOTO NULO");
 }
 
 void RenderBasicInfo() {
@@ -682,46 +761,58 @@ void RenderResultsMenu() {
 	printf("PRESIDENTE");
 }
 
-candidato FindCandidates(int candidateNumber) {
+int FindCandidateIndex(int candidateNumber) {
 	int index = 0;
-	candidato candidate;
+	int returnedIndex = -1;
 	switch (currentStep) {
 		case 1:
 			// DEP. FED.
 			for (index = 0; index < 5; index++) {
 				if (dep_federal[index].num == (candidateNumber / 10)) {
-					printf("%s", dep_federal[index].nome);
-					candidate = dep_federal[index];
+					returnedIndex = index;
 					break;
 				}
 			}
 			break;
 		case 2:
 			// DEP. EST.
+			for (index = 0; index < 5; index++) {
+				if (dep_estadual[index].num == (candidateNumber)) {
+					returnedIndex = index;
+					break;
+				}
+			}
 			break;
 		case 3:
 			//SEN.
+			for (index = 0; index < 5; index++) {
+				if (senador[index].num == (candidateNumber / 100)) {
+					returnedIndex = index;
+					break;
+				}
+			}
 			break;
 		case 4:
 			//GOV.
+			for (index = 0; index < 5; index++) {
+				if (governador[index].num == (candidateNumber / 1000)) {
+					returnedIndex = index;
+					break;
+				}
+			}
 			break;
 		case 5:
 			//PRES.
+			for (index = 0; index < 5; index++) {
+				if (presidente[index].num == (candidateNumber / 1000)) {
+					returnedIndex = index;
+					break;
+				}
+			}
 			break;
 	}
 
-	return candidate;
-}
-
-void imprimeCandidato(candidato c) {
-	printf("Nome: ", c.nome);
-
-	if (c.nome_vice == "") {
-		printf("Vice: ", c.nome_vice);
-	}
-
-	printf("Número: ", c.num);
-	printf("Partido: ", c.partido);
+	return returnedIndex;
 }
 
 void candidatos() {
