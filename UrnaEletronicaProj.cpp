@@ -83,7 +83,7 @@ int HandleProgramRunning() {
 		int pressedKey = getch();
 
 		switch (pressedKey) {
-		case 112:
+		case 59:
 			system("cls");
 			RenderMenu(80, 10, 10, 40);
 			TransformCursorCoordinates(60, 13);
@@ -93,6 +93,8 @@ int HandleProgramRunning() {
 			scanf("%d", &insertedPassword);
 			if (insertedPassword == passwordSecret) {
 				// RenderResults
+				system("cls");
+				RenderResultsMenu();
 			}
 			else {
 				system("cls");
