@@ -17,6 +17,19 @@ int voteNumber[5];
 
 bool isVotingWhite = false;
 
+typedef struct {
+	char nome[60];
+	char partido[15];
+	int num;
+	char nome_vice[60];
+	int qtd_votos;
+} candidato;
+
+candidato dep_federal[4];
+candidato dep_estadual[4];
+candidato senador[4];
+candidato governador[4];
+candidato presidente[4];
 
 int federalDeputyBlank;
 int stateDeputyBlank;
@@ -40,9 +53,15 @@ void RenderEnd();
 void HandleNumberSlot(int quantity, bool firstTimeRender);
 void HandleVotingNumbers(int pressedKey, int totalNumbersAllowed);
 void RenderConfirmationInfo();
+void candidatos();
+candidato FindCandidates(int candidateNumber);
+int VectorToInt();
+void RenderResultsMenu();
+void RenderCandidateInfo(candidato candidate);
 
 int main() {
 	ConfigureAppFullScreen();
+	candidatos();
 	//setlocale(LC_ALL, "Portuguese");
 
 	return HandleProgramRunning();
@@ -128,53 +147,58 @@ int HandleProgramRunning() {
 }
 
 void HandleKeyPresses(int keycode) {
+	candidato currentCandidate;
 	switch (currentStep) {
-	case 0:
-		if (keycode == 13) {
-			currentStep = 1;
-			RenderFederalDeputy(true);
-		}
-		break;
-	case 1:
-		//DEPUTADO FED.
-		if (keycode == 43) {
-			RenderFederalDeputy(false);
-			TransformCursorCoordinates(46, 15);
-			printf("VOTO EM BRANCO");
-			isVotingWhite = true;
-			RenderConfirmationInfo();
-		}
-		else if (keycode == 45) {
-			isVotingWhite = false;
-			currentNumberPosition = 0;
-			RenderFederalDeputy(true);
-		}
-		else if (keycode == 13 && currentNumberPosition == 4) {
-			currentStep = 2;
-			currentNumberPosition = 0;
-			RenderStateDeputy(true);
-			//TODO: ADD ONE TO VOTED CANDIDATE
-		}
-		else if (keycode == 13 && isVotingWhite) {
-			currentStep = 2;
-			currentNumberPosition = 0;
-			RenderStateDeputy(true);
-			federalDeputyBlank += 1;
-			isVotingWhite = false;
-			//mciSendString("play wave1.wav", NULL, 0, NULL);
-		}
-		else {
-			if (!isVotingWhite) {
-				HandleVotingNumbers(keycode, 4);
+		case 0:
+			if (keycode == 13) {
+				currentStep = 1;
+				RenderFederalDeputy(true);
 			}
-			if (currentNumberPosition == 4) {
+			break;
+		case 1:
+			//DEPUTADO FED.
+			if (keycode == 43) {
+				RenderFederalDeputy(false);
+				TransformCursorCoordinates(46, 15);
+				printf("VOTO EM BRANCO");
+				isVotingWhite = true;
 				RenderConfirmationInfo();
-				//TODO: SEARCH AND IF INFORMED NUMBER DOES NOT EXIST SHOW NULL VOTE
-				// TODO: SEARCH AND RENDER CANDIDATE NAME/PARTY
 			}
-		}
+			else if (keycode == 45) {
+				isVotingWhite = false;
+				currentNumberPosition = 0;
+				RenderFederalDeputy(true);
+			}
+			else if (keycode == 13 && currentNumberPosition == 4) {
+				currentStep = 2;
+				currentNumberPosition = 0;
+				RenderStateDeputy(true);
+				currentCandidate.qtd_votos += 1;
+			}
+			else if (keycode == 13 && isVotingWhite) {
+				currentStep = 2;
+				currentNumberPosition = 0;
+				RenderStateDeputy(true);
+				federalDeputyBlank += 1;
+				isVotingWhite = false;
+				//mciSendString("play wave1.wav", NULL, 0, NULL);
+			}
+			else {
+				if (!isVotingWhite) {
+					HandleVotingNumbers(keycode, 4);
+				}
+				if (currentNumberPosition == 4) {
+					RenderConfirmationInfo();
 
-		break;
+					//currentCandidate = FindCandidates(VectorToInt());
+					currentCandidate = FindCandidates(0000);
+
+					RenderCandidateInfo(currentCandidate);
+					//TODO: SEARCH AND IF INFORMED NUMBER DOES NOT EXIST SHOW NULL VOTE
+				}
+			}
+
+			break;
 	case 2:
 		//DEPUTADO EST.
 		if (keycode == 43) {
@@ -338,11 +362,19 @@ void HandleKeyPresses(int keycode) {
 	}
 }
 
-void RenderCandidateInfo() {
-	TransformCursorCoordinates(10, 25);
-	printf("NOME DO CANDIDATO: ");
-	TransformCursorCoordinates(10, 27);
-	printf("PARTIDO: ");
+void RenderCandidateInfo(candidato candidate) {
+	int lineSkip = 0;
+	TransformCursorCoordinates(5, 25);
+	printf("NOME DO CANDIDATO: %s", candidate.nome);
+
+	if (currentStep == 4 || currentStep == 5) {
+		TransformCursorCoordinates(5, 27);
+		printf("NOME DO VICE-CANDIDATO: %s", candidate.nome_vice);
+		lineSkip = 2;
+	}
+
+	TransformCursorCoordinates(5, 27 + lineSkip);
+	printf("PARTIDO: %s", candidate.partido);
 }
 
 void HandleNumberSlot(int quantity, bool firstTimeRender) {
@@ -605,6 +637,23 @@ void RenderMenu(int width, int height, int startingRow, int startingColumn) {
 	}
 }
 
+int VectorToInt() {
+	int value = 0;
+	for (auto i : voteNumber)
+	{
+		int number = i;
+		do
+		{
+			value *= 10;
+			i /= 10;
+		} while (i != 0);
+
+		value += number;
+	}
+
+	return value;
+}
+
 void RenderResultsMenu() {
 
 	RenderMenu(170, 47, 0, 0);
@@ -633,13 +682,36 @@ void RenderResultsMenu() {
 	printf("PRESIDENTE");
 }
 
-typedef struct {
-	char nome[60];
-	char partido[15];
-	int num;
-	char nome_vice[60];
-	int qtd_votos;
-} candidato;
+candidato FindCandidates(int candidateNumber) {
+	int index = 0;
+	candidato candidate;
+	switch (currentStep) {
+		case 1:
+			// DEP. FED.
+			for (index = 0; index < 5; index++) {
+				if (dep_federal[index].num == (candidateNumber / 10)) {
+					printf("%s", dep_federal[index].nome);
+					candidate = dep_federal[index];
+					break;
+				}
+			}
+			break;
+		case 2:
+			// DEP. EST.
+			break;
+		case 3:
+			//SEN.
+			break;
+		case 4:
+			//GOV.
+			break;
+		case 5:
+			//PRES.
+			break;
+	}
+
+	return candidate;
+}
 
 void imprimeCandidato(candidato c) {
 	printf("Nome: ", c.nome);
@@ -653,13 +725,6 @@ void imprimeCandidato(candidato c) {
 }
 
 void candidatos() {
-
-	candidato dep_federal[4];
-	candidato dep_estadual[4];
-	candidato senador[4];
-	candidato governador[4];
-	candidato presidente[4];
-
 	strcpy(dep_federal[0].nome, "Mike Wazowski");
 	strcpy(dep_federal[0].partido, "Disney");
 	dep_federal[0].num = 1313;
