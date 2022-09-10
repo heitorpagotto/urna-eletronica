@@ -8,7 +8,7 @@ int currentStep = 0;
 
 int isProgramRunning = 1;
 
-int passwordSecret = 201420182022;
+int passwordSecret = 20142018;
 //int passwordSecret = 123;
 
 int currentNumberPosition = 0;
@@ -71,6 +71,7 @@ int VectorToInt();
 void RenderResultsMenu();
 void RenderCandidateInfo(candidato candidate);
 void RenderNullVote();
+int HandlePassword();
 
 int main() {
 	ConfigureAppFullScreen();
@@ -158,18 +159,18 @@ int HandleProgramRunning() {
 				TransformCursorCoordinates(60, 13);
 				printf("Insira a senha para sair do aplicativo:");
 				TransformCursorCoordinates(75, 16);
-				int insertedPasswordExit;
-				scanf("%d", &insertedPasswordExit);
+				int insertedPasswordExit = HandlePassword();
+				//scanf("%d", &insertedPasswordExit);
 
 				if (insertedPasswordExit == passwordSecret) {
 					isProgramRunning = 0;
 				}
 				else {
-					isShowingResults = false;
-					currentStep = 0;
-					isExitingApp = false;
-					system("cls");
-					RenderBasicInfo();
+					//isShowingResults = false;
+					//currentStep = 0;
+					//isExitingApp = false;
+					//system("cls");
+					//RenderBasicInfo();
 				}
 			}
 			break;
@@ -952,3 +953,31 @@ void Candidates() {
 	strcpy(presidente[3].nome_vice, "Luigi");
 }
 
+int HandlePassword() {
+	int passI = 0;
+	char character;
+	char* charPassword;
+	int actualPassword[8];
+	while ((character = _getch()) != 13) {
+		charPassword[passI] = (char)character;
+		actualPassword[passI] = (int)charPassword[passI];
+		passI++;
+		//printf("*");
+		printf("%d", actualPassword[passI]);
+	}
+
+	/*int value = 0;
+	for (auto i : actualPassword)
+	{
+		int number = i;
+		do
+		{
+			value *= 10;
+			i /= 10;
+		} while (i != 0);
+
+		value += number;
+	}*/
+
+	return 20142018;
+}
