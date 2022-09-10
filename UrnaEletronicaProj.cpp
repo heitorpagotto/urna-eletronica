@@ -15,8 +15,13 @@ int currentNumberPosition = 0;
 
 int voteNumber[5];
 
+int currentCandidateIdx = -1;
+
 bool isVotingWhite = false;
 bool isVotingNull = false;
+
+bool isShowingResults = false;
+bool isExitingApp = false;
 
 typedef struct {
 	char nome[60];
@@ -111,43 +116,69 @@ int HandleProgramRunning() {
 
 		switch (pressedKey) {
 		case 59:
-			system("cls");
-			RenderMenu(80, 10, 10, 40);
-			TransformCursorCoordinates(60, 13);
-			printf("Insira a senha para visualizar os resultados:");
-			TransformCursorCoordinates(75, 16);
-			int insertedPassword;
-			scanf("%d", &insertedPassword);
-			if (insertedPassword == passwordSecret) {
-				// RenderResults
+			if (currentStep == 0 || currentStep == 6) {
+				isShowingResults = true;
+				isExitingApp = false;
 				system("cls");
-				RenderResultsMenu();
+				RenderMenu(80, 10, 10, 40);
+				TransformCursorCoordinates(60, 13);
+				printf("Insira a senha para visualizar os resultados:");
+				TransformCursorCoordinates(75, 16);
+
+				
+
+				int insertedPassword;
+				scanf("%d", &insertedPassword);
+				if (insertedPassword == passwordSecret) {
+					system("cls");
+					RenderResultsMenu();
+				}
+				else {
+					isShowingResults = false;
+					currentStep = 0;
+					isExitingApp = false;
+					system("cls");
+					RenderBasicInfo();
+				}
 			}
-			else {
+			break;
+		case 60:
+			if (isExitingApp || isShowingResults) {
+				isShowingResults = false;
+				currentStep = 0;
+				isExitingApp = false;
 				system("cls");
 				RenderBasicInfo();
 			}
 			break;
 		case 27:
-			system("cls");
-			RenderMenu(80, 10, 10, 40);
-			TransformCursorCoordinates(60, 13);
-			printf("Insira a senha para sair da aplica??o:");
-			TransformCursorCoordinates(75, 16);
-			int insertedPasswordExit;
-			scanf("%d", &insertedPasswordExit);
-
-			if (insertedPasswordExit == passwordSecret) {
-				isProgramRunning = 0;
-			}
-			else {
+			if (currentStep == 0 || currentStep == 6) {
+				isShowingResults = false;
+				isExitingApp = true;
 				system("cls");
-				RenderBasicInfo();
-			}
+				RenderMenu(80, 10, 10, 40);
+				TransformCursorCoordinates(60, 13);
+				printf("Insira a senha para sair da aplica??o:");
+				TransformCursorCoordinates(75, 16);
+				int insertedPasswordExit;
+				scanf("%d", &insertedPasswordExit);
 
+				if (insertedPasswordExit == passwordSecret) {
+					isProgramRunning = 0;
+				}
+				else {
+					isShowingResults = false;
+					currentStep = 0;
+					isExitingApp = false;
+					system("cls");
+					RenderBasicInfo();
+				}
+			}
 			break;
 		default:
-			HandleKeyPresses(pressedKey);
+			if (!isShowingResults && !isExitingApp) {
+				HandleKeyPresses(pressedKey);
+			}
 			break;
 		}
 	}
@@ -155,7 +186,6 @@ int HandleProgramRunning() {
 }
 
 void HandleKeyPresses(int keycode) {
-	int currentCandidateIdx;
 	switch (currentStep) {
 		case 0:
 			if (keycode == 13) {
@@ -196,7 +226,6 @@ void HandleKeyPresses(int keycode) {
 				federalDeputyBlank += 1;
 				isVotingWhite = false;
 				isVotingNull = false;
-				//mciSendString("play wave1.wav", NULL, 0, NULL);
 			}
 			else {
 				if (!isVotingWhite) {
@@ -591,8 +620,8 @@ void RenderConfirmationInfo() {
 }
 
 void RenderNullVote() {
-	TransformCursorCoordinates(35, 25);
-	printf("VOTO NULO");
+	TransformCursorCoordinates(30, 25);
+	printf("NUMERO ERRADO:  VOTO NULO");
 }
 
 void RenderBasicInfo() {
@@ -734,15 +763,34 @@ int VectorToInt() {
 }
 
 void RenderResultsMenu() {
-
 	RenderMenu(170, 47, 0, 0);
 	RenderMenu(12, 2, 1, 1);
 	TransformCursorCoordinates(2, 2);
 	printf("RESULTADOS");
 
+	RenderMenu(168, 3, 43, 1);
+	TransformCursorCoordinates(4, 44);
+	printf("Aperte (F2) para RETORNAR");
+	TransformCursorCoordinates(4, 45);
+	printf("Aperte (ESC) para SAIR");
+
 	RenderMenu(20, 2, 7, 5);
 	TransformCursorCoordinates(7, 8);
 	printf("DEPUTADO FEDERAL");
+	
+	int idx = 0;
+	for (idx = 0; idx <= 6; idx++) {
+		TransformCursorCoordinates(5, 10 + idx);
+		if (idx <= 4) {
+			printf("(%s) %s - %d Votos", dep_federal[idx].partido,dep_federal[idx].nome, dep_federal[idx].qtd_votos);
+		}
+		else if (idx == 5) {
+			printf("%d Votos Brancos", federalDeputyBlank);
+		}
+		else {
+			printf("%d Votos Nulos", federalDeputyNull);
+		}
+	}
 
 	RenderMenu(21, 2, 7, 40);
 	TransformCursorCoordinates(42, 8);
@@ -828,7 +876,7 @@ void candidatos() {
 	strcpy(dep_federal[2].partido, "Microsoft");
 	dep_federal[2].num = 2222;
 
-	strcpy(dep_federal[3].nome, "Capitão Falcon");
+	strcpy(dep_federal[3].nome, "Capitao Falcon");
 	strcpy(dep_federal[3].partido, "Nintendo");
 	dep_federal[3].num = 1212;
 
@@ -865,7 +913,7 @@ void candidatos() {
 	strcpy(senador[3].partido, "Nintendo");
 	senador[3].num = 122;
 
-	strcpy(governador[0].nome, "Timão");
+	strcpy(governador[0].nome, "Timao");
 	strcpy(governador[0].partido, "Disney");
 	governador[0].num = 13;
 	strcpy(governador[0].nome_vice, "Pumba");
