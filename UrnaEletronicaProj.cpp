@@ -28,6 +28,8 @@ typedef struct {
 	char partido[15];
 	int num;
 	char nome_vice[60];
+	char nome_suplente_1[60];
+	char nome_suplente_2[60];
 	int qtd_votos;
 } candidato;
 
@@ -463,18 +465,36 @@ void HandleKeyPresses(int keycode) {
 }
 
 void RenderCandidateInfo(candidato candidate) {
-	int lineSkip = 0;
 	TransformCursorCoordinates(5, 25);
-	printf("NOME DO CANDIDATO: %s", candidate.nome);
+	printf("NOME: %s", candidate.nome);
+	TransformCursorCoordinates(5, 27);
+	printf("PARTIDO: %s", candidate.partido);
+
+	RenderMenu(20, 15, 8, 79);
 
 	if (currentStep == 4 || currentStep == 5) {
-		TransformCursorCoordinates(5, 27);
-		printf("NOME DO VICE-CANDIDATO: %s", candidate.nome_vice);
-		lineSkip = 2;
+		TransformCursorCoordinates(5, 29);
+		printf("VICE-PRESIDENTE: %s", candidate.nome_vice);
+		RenderMenu(15, 10, 25, 84);
+		TransformCursorCoordinates(90, 30);
+		printf("VICE");
 	}
 
-	TransformCursorCoordinates(5, 27 + lineSkip);
-	printf("PARTIDO: %s", candidate.partido);
+	if (currentStep == 3) {
+		TransformCursorCoordinates(5, 29);
+		printf("PRIMEIRO SUPLENTE: %s", candidate.nome_suplente_1);
+		
+		RenderMenu(15, 10, 28, 67);
+		TransformCursorCoordinates(70, 39);
+		printf("1° SUPLENTE");
+
+		TransformCursorCoordinates(5, 31);
+		printf("SEGUNDO SUPLENTE: %s", candidate.nome_suplente_2);
+
+		RenderMenu(15, 10, 28, 84);
+		TransformCursorCoordinates(85, 39);
+		printf("2° SUPLENTE");
+	}
 }
 
 void HandleNumberSlot(int quantity, bool firstTimeRender) {
@@ -642,62 +662,62 @@ void RenderNumberTiles() {
 	int baseColumn = 102;
 
 	RenderMenu(15, 6, 15, baseColumn);
-	TransformCursorCoordinates(107, 18);
+	TransformCursorCoordinates(109, 18);
 	printf("1");
 
 	RenderMenu(15, 6, 15, baseColumn + 15);
-	TransformCursorCoordinates(122, 18);
+	TransformCursorCoordinates(124, 18);
 	printf("2");
 
 	RenderMenu(15, 6, 15, baseColumn + 30);
-	TransformCursorCoordinates(137, 18);
+	TransformCursorCoordinates(139, 18);
 	printf("3");
 
 	RenderMenu(20, 6, 15, baseColumn + 45);
-	TransformCursorCoordinates(152, 18);
+	TransformCursorCoordinates(154, 18);
 	printf("BRANCO");
-	TransformCursorCoordinates(153, 19);
+	TransformCursorCoordinates(156, 19);
 	printf("(+)");
 
 
 	RenderMenu(15, 6, 22, baseColumn);
-	TransformCursorCoordinates(107, 25);
+	TransformCursorCoordinates(109, 25);
 	printf("4");
 
 	RenderMenu(15, 6, 22, baseColumn + 15);
-	TransformCursorCoordinates(122, 25);
+	TransformCursorCoordinates(124, 25);
 	printf("5");
 
 	RenderMenu(15, 6, 22, baseColumn + 30);
-	TransformCursorCoordinates(137, 25);
+	TransformCursorCoordinates(139, 25);
 	printf("6");
 
 	RenderMenu(20, 6, 22, baseColumn + 45);
-	TransformCursorCoordinates(152, 25);
+	TransformCursorCoordinates(154, 25);
 	printf("CORRIGE");
-	TransformCursorCoordinates(153, 26);
+	TransformCursorCoordinates(155, 26);
 	printf("(-)");
 
 	RenderMenu(15, 6, 29, baseColumn);
-	TransformCursorCoordinates(107, 32);
+	TransformCursorCoordinates(109, 32);
 	printf("7");
 
 	RenderMenu(15, 6, 29, baseColumn + 15);
-	TransformCursorCoordinates(122, 32);
+	TransformCursorCoordinates(124, 32);
 	printf("8");
 
 	RenderMenu(15, 6, 29, baseColumn + 30);
-	TransformCursorCoordinates(137, 32);
+	TransformCursorCoordinates(139, 32);
 	printf("9");
 
 	RenderMenu(20, 12, 29, baseColumn + 45);
-	TransformCursorCoordinates(152, 35);
+	TransformCursorCoordinates(153, 35);
 	printf("CONFIRMA");
 	TransformCursorCoordinates(153, 36);
 	printf("(Enter)");
 
 	RenderMenu(15, 6, 36, baseColumn + 15);
-	TransformCursorCoordinates(122, 39);
+	TransformCursorCoordinates(124, 39);
 	printf("0");
 }
 
