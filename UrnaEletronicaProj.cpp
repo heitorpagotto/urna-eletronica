@@ -8,8 +8,8 @@ int currentStep = 0;
 
 int isProgramRunning = 1;
 
-//int passwordSecret = 20021987201817;
-int passwordSecret = 123;
+int passwordSecret = 201420182022;
+//int passwordSecret = 123;
 
 int currentNumberPosition = 0;
 
@@ -65,7 +65,7 @@ void RenderEnd();
 void HandleNumberSlot(int quantity, bool firstTimeRender);
 void HandleVotingNumbers(int pressedKey, int totalNumbersAllowed);
 void RenderConfirmationInfo();
-void candidatos();
+void Candidates();
 int FindCandidateIndex(int candidateNumber);
 int VectorToInt();
 void RenderResultsMenu();
@@ -74,7 +74,7 @@ void RenderNullVote();
 
 int main() {
 	ConfigureAppFullScreen();
-	candidatos();
+	Candidates();
 	//setlocale(LC_ALL, "Portuguese");
 
 	return HandleProgramRunning();
@@ -99,7 +99,6 @@ void ConfigureAppFullScreen() {
 	system("mode con:cols=170 lines=48");
 }
 
-
 void TransformCursorCoordinates(int x, int y)
 {
 	COORD coord;
@@ -107,7 +106,6 @@ void TransformCursorCoordinates(int x, int y)
 	coord.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-
 
 int HandleProgramRunning() {
 	RenderBasicInfo();
@@ -158,7 +156,7 @@ int HandleProgramRunning() {
 				system("cls");
 				RenderMenu(80, 10, 10, 40);
 				TransformCursorCoordinates(60, 13);
-				printf("Insira a senha para sair da aplica??o:");
+				printf("Insira a senha para sair do aplicativo:");
 				TransformCursorCoordinates(75, 16);
 				int insertedPasswordExit;
 				scanf("%d", &insertedPasswordExit);
@@ -863,7 +861,7 @@ int FindCandidateIndex(int candidateNumber) {
 	return returnedIndex;
 }
 
-void candidatos() {
+void Candidates() {
 	strcpy(dep_federal[0].nome, "Mike Wazowski");
 	strcpy(dep_federal[0].partido, "Disney");
 	dep_federal[0].num = 1313;
