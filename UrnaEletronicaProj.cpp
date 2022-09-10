@@ -603,3 +603,148 @@ void RenderMenu(int width, int height, int startingRow, int startingColumn) {
 	}
 }
 
+void RenderResultsMenu() {
+
+	RenderMenu(170, 47, 0, 0);
+	RenderMenu(12, 2, 1, 1);
+	TransformCursorCoordinates(2, 2);
+	printf("RESULTADOS");
+
+	RenderMenu(20, 2, 7, 5);
+	TransformCursorCoordinates(7, 8);
+	printf("DEPUTADO FEDERAL");
+
+	RenderMenu(21, 2, 7, 40);
+	TransformCursorCoordinates(42, 8);
+	printf("DEPUTADO ESTADUAL");
+
+	RenderMenu(19, 2, 7, 75);
+	TransformCursorCoordinates(81, 8);
+	printf("SENADOR");
+
+	RenderMenu(20, 2, 7, 110);
+	TransformCursorCoordinates(115, 8);
+	printf("GOVERNADOR");
+
+	RenderMenu(20, 2, 7, 145);
+	TransformCursorCoordinates(150, 8);
+	printf("PRESIDENTE");
+}
+
+typedef struct {
+	char nome[60];
+	char partido[15];
+	int num;
+	char nome_vice[60];
+	int qtd_votos;
+} candidato;
+
+void imprimeCandidato(candidato c) {
+	printf("Nome: ", c.nome);
+
+	if (c.nome_vice == "") {
+		printf("Vice: ", c.nome_vice);
+	}
+
+	printf("Número: ", c.num);
+	printf("Partido: ", c.partido);
+}
+
+void candidatos() {
+
+	candidato dep_federal[4];
+	candidato dep_estadual[4];
+	candidato senador[4];
+	candidato governador[4];
+	candidato presidente[4];
+
+	strcpy(dep_federal[0].nome, "Mike Wazowski");
+	strcpy(dep_federal[0].partido, "Disney");
+	dep_federal[0].num = 1313;
+
+	strcpy(dep_federal[1].nome, "Draco Malfoy");
+	strcpy(dep_federal[1].partido, "Warner Bros");
+	dep_federal[1].num = 1515;
+
+	strcpy(dep_federal[2].nome, "Cortana");
+	strcpy(dep_federal[2].partido, "Microsoft");
+	dep_federal[2].num = 2222;
+
+	strcpy(dep_federal[3].nome, "Capitão Falcon");
+	strcpy(dep_federal[3].partido, "Nintendo");
+	dep_federal[3].num = 1212;
+
+
+	strcpy(dep_estadual[0].nome, "Pato Donald");
+	strcpy(dep_estadual[0].partido, "Disney");
+	dep_estadual[0].num = 13313;
+
+	strcpy(dep_estadual[1].nome, "Salsicha");
+	strcpy(dep_estadual[1].partido, "Warner Bros");
+	dep_estadual[1].num = 15515;
+
+	strcpy(dep_estadual[2].nome, "Steve (Minecraft)");
+	strcpy(dep_estadual[2].partido, "Microsoft");
+	dep_estadual[2].num = 22222;
+
+	strcpy(dep_estadual[3].nome, "Wario");
+	strcpy(dep_estadual[3].partido, "Nintendo");
+	dep_estadual[3].num = 12212;
+
+	strcpy(senador[0].nome, "Steven Grant / Mark Spector / Jake Lockley (Moon Knight)");
+	strcpy(senador[0].partido, "Disney");
+	senador[0].num = 133;
+
+	strcpy(senador[1].nome, "Pernalonga");
+	strcpy(senador[1].partido, "Warner Bros");
+	senador[1].num = 155;
+
+	strcpy(senador[2].nome, "Conker");
+	strcpy(senador[2].partido, "Microsoft");
+	senador[2].num = 222;
+
+	strcpy(senador[3].nome, "Kirby");
+	strcpy(senador[3].partido, "Nintendo");
+	senador[3].num = 122;
+
+	strcpy(governador[0].nome, "Timão");
+	strcpy(governador[0].partido, "Disney");
+	governador[0].num = 13;
+	strcpy(governador[0].nome_vice, "Pumba");
+
+	strcpy(governador[1].nome, "Tom");
+	strcpy(governador[1].partido, "Warner Bros");
+	governador[1].num = 15;
+	strcpy(governador[1].nome_vice, "Jerry");
+
+	strcpy(governador[2].nome, "Master Chief");
+	strcpy(governador[2].partido, "Microsoft");
+	governador[2].num = 22;
+	strcpy(governador[2].nome_vice, "DOOM Guy");
+
+	strcpy(governador[3].nome, "Link");
+	strcpy(governador[3].partido, "Nintendo");
+	governador[3].num = 12;
+	strcpy(governador[3].nome_vice, "Zelda");
+
+	strcpy(presidente[0].nome, "Lilo");
+	strcpy(presidente[0].partido, "Disney");
+	presidente[0].num = 13;
+	strcpy(presidente[0].nome_vice, "Stitch");
+
+	strcpy(presidente[1].nome, "Rick");
+	strcpy(presidente[1].partido, "Warner Bros");
+	presidente[1].num = 15;
+	strcpy(presidente[1].nome_vice, "Morty");
+
+	strcpy(presidente[2].nome, "Banjo");
+	strcpy(presidente[2].partido, "Microsoft");
+	presidente[2].num = 22;
+	strcpy(presidente[2].nome_vice, "Kazooie");
+
+	strcpy(presidente[3].nome, "Mario");
+	strcpy(presidente[3].partido, "Nintendo");
+	presidente[3].num = 12;
+	strcpy(presidente[3].nome_vice, "Luigi");
+}
+
