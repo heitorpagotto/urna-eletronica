@@ -4,6 +4,8 @@
 #include <conio.h>
 #include <stdlib.h>
 
+using namespace std;
+
 int currentStep = 0;
 
 int isProgramRunning = 1;
@@ -763,14 +765,15 @@ void RenderMenu(int width, int height, int startingRow, int startingColumn) {
 
 int VectorToInt() {
 	int value = 0;
-	for (auto i : voteNumber)
+	int idx = 0;
+	for (idx = 0; idx < 5; idx++)
 	{
-		int number = i;
+		int number = voteNumber[idx];
 		do
 		{
 			value *= 10;
-			i /= 10;
-		} while (i != 0);
+			voteNumber[idx] /= 10;
+		} while (voteNumber[idx] != 0);
 
 		value += number;
 	}
@@ -1034,14 +1037,15 @@ int HandlePassword() {
 
 	int value = 0;
 
-	for (auto i : actualPassword)
+	int idx = 0;
+	for (idx = 0; idx < 4; idx++)
 	{
-		int number = i;
+		int number = actualPassword[idx];
 		do
 		{
 			value *= 10;
-			i /= 10;
-		} while (i != 0);
+			actualPassword[idx] /= 10;
+		} while (actualPassword[idx] != 0);
 
 		value += number;
 	}
