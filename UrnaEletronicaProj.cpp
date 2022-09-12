@@ -217,11 +217,13 @@ void HandleKeyPresses(int keycode) {
 				else {
 					dep_federal[currentCandidateIdx].qtd_votos += 1;
 				}
+				PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 				RenderStateDeputy(true);
 			}
 			else if (keycode == 13 && isVotingWhite) {
 				currentStep = 2;
 				currentNumberPosition = 0;
+				PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 				RenderStateDeputy(true);
 				federalDeputyBlank += 1;
 				isVotingWhite = false;
@@ -271,11 +273,13 @@ void HandleKeyPresses(int keycode) {
 			else {
 				dep_estadual[currentCandidateIdx].qtd_votos += 1;
 			}
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderSenator(true);
 		}
 		else if (keycode == 13 && isVotingWhite) {
 			currentStep = 3;
 			currentNumberPosition = 0;
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderSenator(true);
 			stateDeputyBlank += 1;
 			isVotingWhite = false;
@@ -323,11 +327,13 @@ void HandleKeyPresses(int keycode) {
 			else {
 				senador[currentCandidateIdx].qtd_votos += 1;
 			}
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderGovernor(true);
 		}
 		else if (keycode == 13 && isVotingWhite) {
 			currentStep = 4;
 			currentNumberPosition = 0;
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderGovernor(true);
 			senatorBlank += 1;
 			isVotingWhite = false;
@@ -375,11 +381,13 @@ void HandleKeyPresses(int keycode) {
 			else {
 				governador[currentCandidateIdx].qtd_votos += 1;
 			}
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderPresident(true);
 		}
 		else if (keycode == 13 && isVotingWhite) {
 			currentStep = 5;
 			currentNumberPosition = 0;
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderPresident(true);
 			governorBlank += 1;
 			isVotingWhite = false;
@@ -427,11 +435,13 @@ void HandleKeyPresses(int keycode) {
 			else {
 				presidente[currentCandidateIdx].qtd_votos += 1;
 			}
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderEnd();
 		}
 		else if (keycode == 13 && isVotingWhite) {
 			currentStep = 6;
 			currentNumberPosition = 0;
+			PlaySound(TEXT("urna.wav"), NULL, SND_FILENAME);
 			RenderEnd();
 			presidentBlank += 1;
 			isVotingWhite = false;
