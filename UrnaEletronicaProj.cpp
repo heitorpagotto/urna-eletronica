@@ -978,21 +978,29 @@ void Candidates() {
 	strcpy(dep_estadual[3].partido, "Nintendo");
 	dep_estadual[3].num = 12212;
 
-	strcpy(senador[0].nome, "Steven Grant / Mark Spector / Jake Lockley (Moon Knight)");
+	strcpy(senador[0].nome, "Steven Grant (Moon Knight)");
 	strcpy(senador[0].partido, "Disney");
 	senador[0].num = 133;
+	strcpy(senador[0].nome_suplente_1, "Mark Spector");
+	strcpy(senador[0].nome_suplente_2, "Jake Lockley");
 
 	strcpy(senador[1].nome, "Pernalonga");
 	strcpy(senador[1].partido, "Warner Bros");
 	senador[1].num = 155;
+	strcpy(senador[1].nome_suplente_1, "Gaguinho");
+	strcpy(senador[1].nome_suplente_2, "Piu-Piu");
 
 	strcpy(senador[2].nome, "Conker");
 	strcpy(senador[2].partido, "Microsoft");
 	senador[2].num = 222;
+	strcpy(senador[2].nome_suplente_1, "Berri");
+	strcpy(senador[2].nome_suplente_2, "Gregg");
 
 	strcpy(senador[3].nome, "Kirby");
 	strcpy(senador[3].partido, "Nintendo");
 	senador[3].num = 122;
+	strcpy(senador[3].nome_suplente_1, "King Dedede");
+	strcpy(senador[3].nome_suplente_2, "Meta Knight");
 
 	strcpy(governador[0].nome, "Timao");
 	strcpy(governador[0].partido, "Disney");
