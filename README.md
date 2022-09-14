@@ -1,12 +1,13 @@
-# urna-eletronica
+# Projeto Urna Eletrônica
 
 Este projeto tem o intuito de simular a experiência de voto da urna eletrônica.
 
-# Tecnologias Utilizada
+# Tecnologias Utilizadas
 - C++
 - GCC (Compiler)
 
-**Como compilar?**
+
+# Como compilar?
 
 Rodar esse comando no terminal aberto no mesmo diretorio
 
