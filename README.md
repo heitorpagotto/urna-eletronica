@@ -1,6 +1,6 @@
-# Projeto Urna Eletrônica
+# Projeto Urna EletrÃ´nica
 
-Este projeto tem o intuito de simular a experiência de voto da urna eletrônica.
+Este projeto tem o intuito de simular a experiÃªncia de voto da urna eletrÃ´nica.
 
 # Tecnologias Utilizadas
 - C++
@@ -12,3 +12,7 @@ Este projeto tem o intuito de simular a experiência de voto da urna eletrônica.
 Rodar esse comando no terminal aberto no mesmo diretorio
 
 `gcc UrnaEletronicaProj.cpp -lwinmm -o UrnaEletronicaProj.exe`
+
+Para compilar no programa DevC++ Ã© preciso ir em `Tools > Compiler Options` e adicionar a segunte linha para a chamada do linker:
+
+`-static-libgcc -lwinmm`
